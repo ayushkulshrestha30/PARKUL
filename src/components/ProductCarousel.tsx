@@ -1,13 +1,5 @@
-import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import { ShoppingCart, Heart } from 'lucide-react';
-
-// Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
+import React, { useRef } from 'react';
+import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -19,6 +11,8 @@ interface Product {
 }
 
 const ProductCarousel: React.FC = () => {
+  const sliderRef = useRef<HTMLDivElement>(null);
+
   const products: Product[] = [
     {
       id: 1,
@@ -86,155 +80,131 @@ const ProductCarousel: React.FC = () => {
     }
   ];
 
+  const scrollLeft = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
+
   return (
-    <section id="product-section" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <section id="product-section" className="py-8 sm:py-12 lg:py-16 bg-white">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6 font-serif">
-            Explore Our Comfort Collection
+        <div className="text-center mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-serif">
+            Explore Our Collection
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-            Designed to fit you beautifully, crafted to last.
-          </p>
-          <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-pink-400 to-rose-400 mx-auto mt-4 sm:mt-6 rounded-full"></div>
+          <div className="w-20 h-1 bg-gradient-to-r from-pink-400 to-rose-400 mx-auto rounded-full"></div>
         </div>
 
-        {/* Swiper Carousel */}
-        <div className="relative max-w-7xl mx-auto">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={1}
-            speed={600} // Smooth 600ms transition
-            loop={true}
-            grabCursor={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-              pauseOnMouseEnter: true,
+        {/* Slider Container */}
+        <div className="relative">
+          {/* Scroll Container */}
+          <div
+            ref={sliderRef}
+            className="flex overflow-x-auto gap-4 py-4 scroll-smooth"
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitScrollbar: { display: 'none' }
             }}
-            pagination={{
-              clickable: true,
-              bulletClass: 'swiper-pagination-bullet !bg-pink-300',
-              bulletActiveClass: 'swiper-pagination-bullet-active !bg-pink-500',
-            }}
-            navigation={{
-              nextEl: '.swiper-button-next-custom',
-              prevEl: '.swiper-button-prev-custom',
-            }}
-            breakpoints={{
-              640: {
-                slidesPerView: 1,
-                spaceBetween: 15,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 25,
-              },
-              1280: {
-                slidesPerView: 4,
-                spaceBetween: 30,
-              },
-            }}
-            className="!pb-12 sm:!pb-16"
           >
             {products.map((product) => (
-              <SwiperSlide key={product.id}>
-                <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group border border-pink-100/50 overflow-hidden h-full">
-                  {/* Product Image */}
-                  <div className="relative overflow-hidden rounded-t-2xl bg-gradient-to-br from-pink-50 to-rose-50">
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      className="w-full h-48 sm:h-56 lg:h-64 xl:h-72 object-cover group-hover:scale-110 transition-transform duration-700"
-                      loading="lazy"
-                    />
-                    
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    
-                    {/* Wishlist button */}
-                    <button className="absolute top-3 right-3 w-8 h-8 sm:w-10 sm:h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:bg-white transition-all duration-200 transform hover:scale-110 opacity-0 group-hover:opacity-100">
-                      <Heart size={16} className="sm:w-5 sm:h-5" />
-                    </button>
+              <div
+                key={product.id}
+                className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] flex-shrink-0 bg-gray-50 rounded-2xl p-4 text-center transition-transform duration-300 hover:scale-105 group"
+              >
+                {/* Product Image */}
+                <div className="relative overflow-hidden rounded-2xl mb-3">
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="w-full h-48 sm:h-56 object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                  
+                  {/* Wishlist button */}
+                  <button className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 transition-all duration-200 opacity-0 group-hover:opacity-100">
+                    <Heart size={16} />
+                  </button>
 
-                    {/* Sale badge */}
-                    {product.originalPrice && (
-                      <div className="absolute top-3 left-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow-lg">
-                        SALE
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Product Details */}
-                  <div className="p-4 sm:p-5 lg:p-6 flex flex-col flex-grow">
-                    <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-800 mb-2 sm:mb-3 line-clamp-2 group-hover:text-pink-600 transition-colors duration-200">
-                      {product.title}
-                    </h3>
-                    
-                    <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4 leading-relaxed flex-grow">
-                      {product.description}
-                    </p>
-
-                    {/* Price */}
-                    <div className="flex items-center justify-between mb-4 sm:mb-5">
-                      <div className="flex items-center space-x-2">
-                        <span className="text-lg sm:text-xl lg:text-2xl font-bold text-pink-600">
-                          {product.price}
-                        </span>
-                        {product.originalPrice && (
-                          <span className="text-sm sm:text-base text-gray-400 line-through">
-                            {product.originalPrice}
-                          </span>
-                        )}
-                      </div>
-                      {product.originalPrice && (
-                        <span className="text-xs sm:text-sm bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
-                          Save {Math.round(((parseInt(product.originalPrice.slice(1)) - parseInt(product.price.slice(1))) / parseInt(product.originalPrice.slice(1))) * 100)}%
-                        </span>
-                      )}
+                  {/* Sale badge */}
+                  {product.originalPrice && (
+                    <div className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                      SALE
                     </div>
-
-                    {/* CTA Button */}
-                    <button className="w-full bg-gradient-to-r from-pink-500 to-rose-500 text-white py-2.5 sm:py-3 px-4 sm:px-6 rounded-xl font-semibold text-sm sm:text-base hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105 hover:shadow-lg flex items-center justify-center group/btn mt-auto">
-                      <ShoppingCart size={16} className="mr-2 group-hover/btn:animate-bounce" />
-                      Shop Now
-                    </button>
-                  </div>
+                  )}
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
 
-          {/* Custom Navigation Buttons */}
-          <button className="swiper-button-prev-custom absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 xl:-translate-x-6 z-10 w-12 h-12 xl:w-14 xl:h-14 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-pink-100 hidden lg:flex">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m15 18-6-6 6-6"/>
-            </svg>
+                {/* Product Details */}
+                <h4 className="text-sm sm:text-base font-semibold text-gray-800 mb-2 line-clamp-2">
+                  {product.title}
+                </h4>
+                
+                <p className="text-xs sm:text-sm text-gray-600 mb-3">
+                  {product.description}
+                </p>
+
+                {/* Price */}
+                <div className="flex items-center justify-center space-x-2 mb-3">
+                  <span className="text-lg font-bold text-pink-600">
+                    {product.price}
+                  </span>
+                  {product.originalPrice && (
+                    <span className="text-sm text-gray-400 line-through">
+                      {product.originalPrice}
+                    </span>
+                  )}
+                </div>
+
+                {/* CTA Button */}
+                <button className="w-full bg-pink-600 text-white py-2 px-4 rounded-2xl font-medium text-sm hover:bg-pink-700 transition-colors duration-200 flex items-center justify-center">
+                  <ShoppingCart size={14} className="mr-2" />
+                  Shop Now
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Navigation Arrows */}
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:border-pink-300 transition-all duration-200 shadow-lg hover:shadow-xl z-10 hidden sm:flex"
+          >
+            <ChevronLeft size={20} />
           </button>
 
-          <button className="swiper-button-next-custom absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 xl:translate-x-6 z-10 w-12 h-12 xl:w-14 xl:h-14 bg-white shadow-lg rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:shadow-xl transition-all duration-300 transform hover:scale-110 border border-pink-100 hidden lg:flex">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m9 18 6-6-6-6"/>
-            </svg>
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:border-pink-300 transition-all duration-200 shadow-lg hover:shadow-xl z-10 hidden sm:flex"
+          >
+            <ChevronRight size={20} />
           </button>
         </div>
 
         {/* View All Products CTA */}
-        <div className="text-center mt-8 sm:mt-12 lg:mt-16">
+        <div className="text-center mt-8">
           <button 
             onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white text-pink-600 border-2 border-pink-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            className="bg-white text-pink-600 border-2 border-pink-500 px-6 py-3 rounded-xl font-semibold hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105"
           >
             View All Products
           </button>
         </div>
       </div>
+
+      {/* Custom Scrollbar Styles */}
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 };
