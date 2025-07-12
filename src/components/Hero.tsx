@@ -27,7 +27,10 @@ const Hero: React.FC = () => {
           </p>
         </div>
 
-        <button className="group bg-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-pink-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+        <button 
+          onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
+          className="group bg-pink-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-pink-700 transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+        >
           <span className="flex items-center justify-center">
             Shop The Collection
             <svg 

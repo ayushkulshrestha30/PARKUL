@@ -63,7 +63,7 @@ const CustomerReviews: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-pink-50/30 via-white to-rose-50/30">
+    <section id="review-section" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-pink-50/30 via-white to-rose-50/30">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
@@ -131,10 +131,16 @@ const CustomerReviews: React.FC = () => {
               delivered right to your doorstep.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+              <button 
+                onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-gradient-to-r from-pink-500 to-rose-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              >
                 Shop Now
               </button>
-              <button className="bg-white text-pink-600 border-2 border-pink-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105">
+              <button 
+                onClick={() => document.getElementById('review-section')?.scrollIntoView({ behavior: 'smooth' })}
+                className="bg-white text-pink-600 border-2 border-pink-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105"
+              >
                 Read More Reviews
               </button>
             </div>

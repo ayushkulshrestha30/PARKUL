@@ -56,7 +56,10 @@ const Newsletter: React.FC = () => {
 
         {/* CTA Button */}
         <div className="text-center mt-6 sm:mt-8">
-          <button className="bg-white text-pink-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-pink-50 transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <button 
+            onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-white text-pink-600 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-base sm:text-lg hover:bg-pink-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+          >
             Shop Now & Save
           </button>
         </div>

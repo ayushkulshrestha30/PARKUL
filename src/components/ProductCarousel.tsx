@@ -87,7 +87,7 @@ const ProductCarousel: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-pink-50 via-white to-rose-50">
+    <section id="product-section" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-pink-50 via-white to-rose-50">
       <div className="container mx-auto px-4 sm:px-6">
         {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
@@ -227,7 +227,10 @@ const ProductCarousel: React.FC = () => {
 
         {/* View All Products CTA */}
         <div className="text-center mt-8 sm:mt-12 lg:mt-16">
-          <button className="bg-white text-pink-600 border-2 border-pink-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <button 
+            onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
+            className="bg-white text-pink-600 border-2 border-pink-500 px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-base sm:text-lg hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+          >
             View All Products
           </button>
         </div>
