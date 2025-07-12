@@ -232,44 +232,6 @@ const ProductCarousel: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {/* Custom Swiper Styles */}
-      <style jsx global>{`
-        .swiper-pagination {
-          bottom: 0 !important;
-        }
-        
-        .swiper-pagination-bullet {
-          width: 12px !important;
-          height: 12px !important;
-          margin: 0 6px !important;
-          opacity: 0.5 !important;
-          transition: all 0.3s ease !important;
-        }
-        
-        .swiper-pagination-bullet-active {
-          opacity: 1 !important;
-          transform: scale(1.2) !important;
-        }
-        
-        .swiper-slide {
-          height: auto !important;
-          display: flex !important;
-        }
-        
-        .swiper-slide > div {
-          width: 100% !important;
-          display: flex !important;
-          flex-direction: column !important;
-        }
-
-        @media (max-width: 1023px) {
-          .swiper-button-prev-custom,
-          .swiper-button-next-custom {
-            display: none !important;
-          }
-        }
-      `}</style>
     </section>
   );
 };
