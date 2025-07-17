@@ -1,210 +1,216 @@
-import React, { useRef } from 'react';
-import { ShoppingCart, Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface Product {
-  id: number;
-  title: string;
-  price: string;
-  description: string;
-  image: string;
-  originalPrice?: string;
-}
+import React, { useState, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 
 const ProductCarousel: React.FC = () => {
-  const sliderRef = useRef<HTMLDivElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const products: Product[] = [
+  const products = [
     {
       id: 1,
-      title: "Floral Cotton Maxi Dress",
-      price: "₹899",
-      originalPrice: "₹1,299",
-      description: "95% Cotton, 5% Elastane - Breathable & Comfortable",
-      image: "/WhatsApp Image 2025-07-10 at 20.45.39_2df24454.jpg"
+      name: "Premium Cotton T-Shirt",
+      price: 29.99,
+      originalPrice: 39.99,
+      image: "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: true
     },
     {
       id: 2,
-      title: "Navy Block Print Maxi",
-      price: "₹799",
-      originalPrice: "₹1,199",
-      description: "Premium Cotton Blend - Traditional Print",
-      image: "/WhatsApp Image 2025-07-10 at 20.45.33_933f1ba4.jpg"
+      name: "Denim Jacket",
+      price: 79.99,
+      originalPrice: 99.99,
+      image: "https://images.pexels.com/photos/1124465/pexels-photo-1124465.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: true
     },
     {
       id: 3,
-      title: "Maroon Ethnic Maxi Dress",
-      price: "₹949",
-      originalPrice: "₹1,399",
-      description: "Soft Cotton Fabric - Elegant Design",
-      image: "/WhatsApp Image 2025-07-10 at 20.45.33_c7b6f57d.jpg"
+      name: "Summer Dress",
+      price: 49.99,
+      originalPrice: null,
+      image: "https://images.pexels.com/photos/1536619/pexels-photo-1536619.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: false
     },
     {
       id: 4,
-      title: "Golden Leaf Kaftan",
-      price: "₹1,199",
-      originalPrice: "₹1,699",
-      description: "Luxurious Cotton - Flowing Silhouette",
-      image: "/WhatsApp Image 2025-07-10 at 20.45.34_1e639564.jpg"
+      name: "Casual Sneakers",
+      price: 89.99,
+      originalPrice: 119.99,
+      image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: true
     },
     {
       id: 5,
-      title: "Lace Push-Up Bra",
-      price: "₹599",
-      originalPrice: "₹899",
-      description: "Delicate Lace - Perfect Support & Comfort",
-      image: "/WhatsApp Image 2025-07-10 at 20.45.34_58acfc71.jpg"
+      name: "Leather Handbag",
+      price: 129.99,
+      originalPrice: null,
+      image: "https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: false
     },
     {
       id: 6,
-      title: "Cotton Mid-Waist Panty",
-      price: "₹299",
-      originalPrice: "₹399",
-      description: "95% Cotton, 5% Spandex - All-day Comfort",
-      image: "https://images.pexels.com/photos/7679720/pexels-photo-7679720.jpeg?auto=compress&cs=tinysrgb&w=400"
-    },
-    {
-      id: 7,
-      title: "Seamless Sports Bra",
-      price: "₹699",
-      originalPrice: "₹999",
-      description: "Medium Support - Moisture Wicking Fabric",
-      image: "https://images.pexels.com/photos/6311392/pexels-photo-6311392.jpeg?auto=compress&cs=tinysrgb&w=400"
-    },
-    {
-      id: 8,
-      title: "Comfort Fit Brief",
-      price: "₹249",
-      originalPrice: "₹349",
-      description: "Soft Cotton Blend - No-Show Design",
-      image: "https://images.pexels.com/photos/7679658/pexels-photo-7679658.jpeg?auto=compress&cs=tinysrgb&w=400"
+      name: "Wool Sweater",
+      price: 69.99,
+      originalPrice: 89.99,
+      image: "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=400",
+      sale: true
     }
   ];
 
-  const scrollLeft = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-    }
+  const getVisibleProducts = () => {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 640) return 1;
+    if (screenWidth < 768) return 2;
+    if (screenWidth < 1024) return 3;
+    return 4;
   };
 
-  const scrollRight = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-    }
+  const [visibleProducts, setVisibleProducts] = useState(getVisibleProducts());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setVisibleProducts(getVisibleProducts());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => 
+        prev >= products.length - visibleProducts ? 0 : prev + 1
+      );
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [currentIndex, visibleProducts, isAutoPlaying, products.length]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => 
+      prev >= products.length - visibleProducts ? 0 : prev + 1
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => 
+      prev <= 0 ? products.length - visibleProducts : prev - 1
+    );
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
   };
 
   return (
-    <section id="product-section" className="py-8 sm:py-12 lg:py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-serif">
-            Explore Our Collection
+    <section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+            Featured Products
           </h2>
-          <div className="w-20 h-1 bg-gradient-to-r from-pink-400 to-rose-400 mx-auto rounded-full"></div>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Discover our handpicked selection of premium products crafted with care and attention to detail.
+          </p>
         </div>
 
-        {/* Slider Container */}
-        <div className="relative">
-          {/* Scroll Container */}
-          <div
-            ref={sliderRef}
-            className="flex overflow-x-auto gap-4 py-4 scroll-smooth"
-            style={{
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              WebkitScrollbar: { display: 'none' }
-            }}
+        <div 
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsAutoPlaying(false)}
+          onMouseLeave={() => setIsAutoPlaying(true)}
+        >
+          {/* Navigation Buttons */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
           >
+            <ChevronLeft size={24} />
+          </button>
+          
+          <button
+            onClick={nextSlide}
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white text-gray-800 p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          {/* Products Container */}
+          <div className="flex transition-transform duration-600 ease-in-out"
+               style={{ 
+                 transform: `translateX(-${currentIndex * (100 / visibleProducts)}%)`,
+                 width: `${(products.length / visibleProducts) * 100}%`
+               }}>
             {products.map((product) => (
               <div
                 key={product.id}
-                className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] flex-shrink-0 bg-gray-50 rounded-2xl p-4 text-center transition-transform duration-300 hover:scale-105 group"
+                className="flex-shrink-0 px-3"
+                style={{ width: `${100 / products.length}%` }}
               >
-                {/* Product Image */}
-                <div className="relative overflow-hidden rounded-2xl mb-3">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-48 sm:h-56 object-cover rounded-2xl group-hover:scale-110 transition-transform duration-500"
-                    loading="lazy"
-                  />
-                  
-                  {/* Wishlist button */}
-                  <button className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 transition-all duration-200 opacity-0 group-hover:opacity-100">
-                    <Heart size={16} />
-                  </button>
+                <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group h-full flex flex-col">
+                  {/* Product Image */}
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    
+                    {/* Sale Badge */}
+                    {product.sale && (
+                      <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                        Sale
+                      </div>
+                    )}
+                    
+                    {/* Wishlist Button */}
+                    <button className="absolute top-4 right-4 bg-white/90 hover:bg-white text-gray-600 hover:text-pink-500 p-2 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
+                      <Heart size={20} />
+                    </button>
+                  </div>
 
-                  {/* Sale badge */}
-                  {product.originalPrice && (
-                    <div className="absolute top-2 left-2 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-                      SALE
+                  {/* Product Info */}
+                  <div className="p-6 flex-grow flex flex-col">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+                      {product.name}
+                    </h3>
+                    
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-xl font-bold text-pink-600">
+                        ${product.price}
+                      </span>
+                      {product.originalPrice && (
+                        <span className="text-sm text-gray-500 line-through">
+                          ${product.originalPrice}
+                        </span>
+                      )}
                     </div>
-                  )}
+
+                    <button className="mt-auto bg-pink-500 hover:bg-pink-600 text-white py-3 px-6 rounded-lg font-semibold transition-all duration-300 hover:transform hover:scale-105">
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
-
-                {/* Product Details */}
-                <h4 className="text-sm sm:text-base font-semibold text-gray-800 mb-2 line-clamp-2">
-                  {product.title}
-                </h4>
-                
-                <p className="text-xs sm:text-sm text-gray-600 mb-3">
-                  {product.description}
-                </p>
-
-                {/* Price */}
-                <div className="flex items-center justify-center space-x-2 mb-3">
-                  <span className="text-lg font-bold text-pink-600">
-                    {product.price}
-                  </span>
-                  {product.originalPrice && (
-                    <span className="text-sm text-gray-400 line-through">
-                      {product.originalPrice}
-                    </span>
-                  )}
-                </div>
-
-                {/* CTA Button */}
-                <button className="w-full bg-pink-600 text-white py-2 px-4 rounded-2xl font-medium text-sm hover:bg-pink-700 transition-colors duration-200 flex items-center justify-center">
-                  <ShoppingCart size={14} className="mr-2" />
-                  Shop Now
-                </button>
               </div>
             ))}
           </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={scrollLeft}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:border-pink-300 transition-all duration-200 shadow-lg hover:shadow-xl z-10 hidden sm:flex"
-          >
-            <ChevronLeft size={20} />
-          </button>
-
-          <button
-            onClick={scrollRight}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 w-10 h-10 sm:w-12 sm:h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-600 hover:text-pink-600 hover:border-pink-300 transition-all duration-200 shadow-lg hover:shadow-xl z-10 hidden sm:flex"
-          >
-            <ChevronRight size={20} />
-          </button>
-        </div>
-
-        {/* View All Products CTA */}
-        <div className="text-center mt-8">
-          <button 
-            onClick={() => document.getElementById('product-section')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white text-pink-600 border-2 border-pink-500 px-6 py-3 rounded-xl font-semibold hover:bg-pink-500 hover:text-white transition-all duration-300 transform hover:scale-105"
-          >
-            View All Products
-          </button>
+          {/* Pagination Dots */}
+          <div className="flex justify-center mt-8 gap-2">
+            {Array.from({ length: products.length - visibleProducts + 1 }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  currentIndex === index
+                    ? 'bg-pink-500 scale-125'
+                    : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-
-      {/* Custom Scrollbar Styles */}
-      <style jsx>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 };
